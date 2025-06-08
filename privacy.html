@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#9dca1d">
+    <title>Política de Privacidad - Team Forever Foro</title>
+    <link rel="icon" href="https://i.postimg.cc/7Zwkmghd/Chat-GPT-Image-8-jun-2025-02-45-12-a-m.png"> <style>
+        /* Estilos generales para 4chan-like */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #E0E0CC; /* Fondo 4chan */
+            color: #800; /* Texto principal */
+            font-size: 13px;
+        }
+
+        a {
+            color: #800; /* Color de enlaces */
+            text-decoration: none;
+        }
+        a:hover {
+            color: #e00; /* Color de hover de enlaces */
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #D9BFB7;
+            margin: 10px 0;
+        }
+
+        /* Colores Morados Personalizados */
+        :root {
+            --purple-dark: #6A057F; /* Morado oscuro para títulos */
+            --purple-medium: #8A2BE2; /* Morado medio para resaltado */
+            --purple-light: #E6D9F0; /* Morado claro para fondos suaves */
+            --red-4chan: #cc1105;
+            --green-4chan: #117743;
+        }
+
+        .header {
+            background-color: var(--purple-light); /* Fondo morado claro */
+            border-bottom: 1px solid var(--purple-medium); /* Borde morado */
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--purple-dark); /* Título morado oscuro */
+        }
+        .header-right {
+            display: flex;
+            gap: 15px;
+        }
+        .header-right a {
+            color: var(--purple-dark);
+            font-weight: bold;
+        }
+        .header-right a:hover {
+            color: var(--purple-medium);
+        }
+
+        #board-content {
+            width: 57.69em;
+            min-width: 750px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #FED; /* Fondo de foro */
+            border: 1px solid #D9BFB7; /* Borde general */
+        }
+
+        /* Formulario de Nuevo Hilo/Post */
+        .post-form-container {
+            border: 1px solid #D9BFB7;
+            background-color: var(--purple-light); /* Fondo morado claro */
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .post-form-container h2 {
+            margin-top: 0;
+            color: var(--purple-dark);
+        }
+        .post-form-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: #800;
+        }
+        .post-form-container input[type="text"],
+        .post-form-container input[type="file"],
+        .post-form-container textarea {
+            width: calc(100% - 12px);
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #D9BFB7;
+            background-color: #fff;
+            color: #333;
+        }
+        .post-form-container textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .post-form-container button {
+            background-color: var(--purple-medium);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .post-form-container button:hover {
+            background-color: var(--purple-dark);
+        }
+        .message {
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 0;
+            text-align: center;
+            border: 1px solid;
+            font-size: 12px;
+        }
+        .message.success {
+            background-color: #D4EDDA;
+            color: #155724;
+            border-color: #C3E6CB;
+        }
+        .message.error {
+            background-color: #F8D7DA;
+            color: #721C24;
+            border-color: #F5C6CB;
+        }
+        .captcha-container {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Estilos de hilos y posts */
+        .thread {
+            text-align: left;
+            background-color: #f0f0f0; /* Un ligero fondo para distinguir hilos en listados */
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            overflow: auto; /* Para contener floats */
+        }
+
+        .thread-container { /* Usado en board.html para agrupar hilos */
+            clear: both;
+            margin: 0;
+            height: auto;
+        }
+
+        .op-post { /* Estilo específico para el post original en la vista de hilo */
+            background-color: #FED; /* Fondo claro para OP */
+            border: 1px solid #D9BFB7;
+            padding: 10px;
+            margin-bottom: 10px;
+            overflow: auto;
+            position: relative; /* Para posicionar la imagen correctamente */
+            padding-right: 140px; /* Espacio para la imagen a la derecha */
+        }
+
+        .hideIcon { /* Para el botón de ocultar/mostrar, si se implementa */
+            float: left;
+            margin-right: 5px;
+            cursor: pointer;
+            color: #800;
+            font-weight: bold;
+        }
+
+        .hideIcon:hover {
+            color: #e00;
+        }
+
+        .threadThumbnail { /* Imagen de miniatura en la vista de tablero (a la izquierda del texto) */
+            float: left;
+            margin-left: 0;
+            margin-right: 15px; /* Espacio a la derecha del thumbnail */
+            margin-top: 3px;
+            margin-bottom: 5px;
+            border: 1px solid #aaa;
+            max-height: 125px; /* Limitar altura de thumbnails */
+            max-width: 125px; /* Limitar anchura de thumbnails */
+        }
+
+        .threadImg { /* Clase para la imagen principal del OP en la vista de hilo (flotada a la derecha) */
+            height: auto;
+            max-width: 125px; /* Tamaño por defecto para la imagen del OP en la vista de hilo */
+            max-height: 125px; /* Altura máxima */
+            float: right;
+            margin-left: 15px; /* Espacio a la izquierda de la imagen */
+            margin-bottom: 5px;
+            border: 1px solid #aaa; /* Borde para la imagen del post */
+        }
+
+        .expandedImg { /* Si se implementa expansión de imagen */
+            max-width: none !important;
+            max-height: none !important;
+        }
+
+        .comment-info { /* Contenedor para metadatos del post */
+            overflow: auto;
+            margin: 0 5px 5px 5px;
+            font-size: 93%;
+        }
+
+        .comment-info span {
+            margin-right: 10px;
+        }
+
+        #thread-author, .post-author { /* Usar clase para autores de respuestas */
+            color: var(--green-4chan);
+            font-weight: bold;
+        }
+
+        #thread-title, .post-subject { /* Usar clase para asuntos de respuestas */
+            color: var(--red-4chan);
+            font-weight: bold;
+        }
+
+        #thread-id, .post-id { /* Usar clase para IDs de posts */
+            font-weight: bold;
+        }
+
+        #thread-message, .post-message { /* Usar clase para el cuerpo del mensaje */
+            font-size: inherit;
+            clear: none; /* No clear left/right para que el texto fluya alrededor de la imagen */
+            padding-top: 5px;
+            word-wrap: break-word;
+            overflow: hidden; /* Oculta si el texto es demasiado largo, aunque word-wrap ayuda */
+        }
+
+        .summary { /* Para el texto "X respuestas omitidas" */
+            color: #707070;
+            font-size: 85%;
+            margin-left: 20px; /* Alinear con el contenido del post */
+        }
+
+        .reply-container {
+            margin-left: 20px; /* Indentación para respuestas */
+            margin-bottom: 5px;
+        }
+        .reply {
+            background-color: #f0e0d6; /* Fondo para respuestas */
+            border: 1px solid #D9BFB7;
+            padding: 2px 5px 5px 5px;
+            margin: 0 0 5px 0;
+            min-width: 300px;
+            overflow: auto; /* Para contener floats */
+            position: relative; /* Para la imagen a la derecha */
+            padding-right: 140px; /* Espacio para la imagen */
+        }
+        .reply-container span, .sideArrow {
+            /* No se usa float aquí para mayor control */
+        }
+        .sideArrow { /* Para las flechas ">>" antes de una respuesta */
+            color: #800; /* Color 4chan para enlaces */
+            margin-right: 5px;
+            float: left; /* Para que la flecha flote */
+        }
+
+        .comment { /* Contenedor del mensaje y posible imagen en una respuesta */
+            margin: 5px 0px 0px 0px;
+            overflow: hidden; /* Oculta si el texto es demasiado largo, sin clear */
+            clear: none;
+        }
+
+        .comment .threadThumbnail { /* Imagen en una respuesta (flotada a la derecha) */
+            float: right;
+            margin-left: 15px; /* Espacio a la izquierda de la imagen */
+            margin-right: 0;
+        }
+
+        /* GIF de ejemplo (ajusta la URL y la posición según tu gusto) */
+        .header-gif {
+            max-height: 50px; /* Ajusta el tamaño del GIF */
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            font-size: 93%;
+            text-align: center;
+            clear: both;
+            border-top: 1px solid #D9BFB7;
+            margin-top: 40px;
+            padding-top: 15px;
+            background-color: #FED;
+            color: #800;
+        }
+        .footer ul {
+            display: table;
+            margin: auto;
+            padding: 0;
+            list-style: none;
+        }
+        .footer li {
+            background: #FED;
+            display: block;
+            float: left;
+            border: 1px solid #D9BFB7;
+            padding-left: 1em;
+            padding-right: 1em;
+            padding-bottom: 2px;
+            border-left: none;
+            margin-top: -1px;
+            padding-top: 2px;
+            font-size: 0.9em;
+        }
+        .footer li:first-child {
+            border-left: 1px solid #D9BFB7;
+        }
+        .footer li a {
+            color: #800;
+            text-decoration: none;
+        }
+        .footer li a:hover {
+            color: #c63;
+        }
+        .footer-text {
+            padding-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        /* Estilos Responsivos */
+        @media (max-width: 768px) {
+            #board-content {
+                width: auto;
+                min-width: unset;
+                margin: 10px auto;
+                padding: 5px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+            .header-right {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+            .post-form-container input[type="text"],
+            .post-form-container input[type="file"],
+            .post-form-container textarea {
+                width: calc(100% - 10px); /* Ajuste de padding en móvil */
+            }
+            .threadThumbnail, .threadImg {
+                float: none;
+                display: block;
+                margin: 5px auto;
+                max-width: 100px; /* Reducir en móvil */
+                max-height: 100px;
+            }
+            .op-post, .reply {
+                padding-right: 10px; /* Quitar padding derecho extra si la imagen está apilada */
+            }
+            .reply-container {
+                margin-left: 10px;
+            }
+            .footer ul {
+                display: block;
+                width: auto;
+                padding: 0 10px;
+            }
+            .footer li {
+                float: none;
+                display: block;
+                border-left: 1px solid #D9BFB7;
+                margin-top: 5px;
+            }
+            .footer li:first-child {
+                margin-top: 0;
+            }
+            .footer-text { /* Asegurarse de que el texto del footer no tenga problemas de espaciado */
+                padding: 10px;
+            }
+        }
+
+        /* Estilos específicos para el contenido de la Política de Privacidad */
+        .privacy-content {
+            background-color: #FED; /* Fondo de foro */
+            border: 1px solid #D9BFB7; /* Borde general */
+            width: 57.69em;
+            min-width: 750px;
+            margin: 20px auto;
+            padding: 20px;
+            box-sizing: border-box; /* Incluir padding en el ancho */
+            text-align: left; /* Alinear texto a la izquierda */
+        }
+
+        .privacy-content h2 {
+            font-size: 2em;
+            color: var(--purple-dark);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--purple-medium);
+            padding-bottom: 5px;
+        }
+
+        .privacy-content h3 {
+            font-size: 1.5em;
+            color: var(--purple-medium);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .privacy-content p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .privacy-content ul {
+            list-style: disc; /* Puntos de lista */
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .privacy-content ul li {
+            margin-bottom: 8px;
+        }
+
+        /* Ajustes responsivos para el contenido de Privacidad */
+        @media (max-width: 768px) {
+            .privacy-content {
+                width: auto;
+                min-width: unset;
+                margin: 10px auto;
+                padding: 10px;
+            }
+            .privacy-content h2 {
+                font-size: 1.8em;
+            }
+            .privacy-content h3 {
+                font-size: 1.3em;
+            }
+            .privacy-content p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <a href="/">Team Forever Foro</a>
+            <img src="https://i.postimg.cc/SNwXw8R4/team-forever-logo-blanco.png" alt="Team Forever Logo" class="header-gif">
+        </div>
+        <div class="header-right">
+            <a href="/">Inicio</a>
+            <a href="terms.html">Términos</a>
+            <a href="privacy.html">Privacidad</a> </div>
+    </div>
+
+    <div class="privacy-content">
+        <h2>Política de Privacidad de Team Forever Foro</h2>
+        <hr>
+        <p>En Team Forever Foro, la privacidad de nuestros usuarios es importante. Esta política describe cómo recopilamos, usamos y protegemos la información cuando utilizas nuestro foro.</p>
+
+        <h3>1. Información que Recopilamos</h3>
+        <ul>
+            <li>
+                **Direcciones IP:** Recopilamos y almacenamos temporalmente las direcciones IP de los usuarios al crear hilos y respuestas. Esto se hace únicamente con el propósito de prevenir y combatir el spam, así como para la moderación y seguridad del foro. No utilizamos las IPs para identificar personalmente a los usuarios ni para otros fines.
+            </li>
+            <li>
+                **Contenido de Publicaciones:** Recopilamos el contenido que publicas en el foro (mensajes, asuntos, imágenes subidas). Este contenido es de naturaleza pública y se muestra a otros usuarios del foro.
+            </li>
+            <li>
+                **Cookies:** Nuestro foro puede utilizar cookies para mantener tu sesión activa, recordar tus preferencias de visualización o para el funcionamiento del hCaptcha (si está integrado). Estas cookies son funcionales y no se utilizan para rastreo personal.
+            </li>
+        </ul>
+
+        <h3>2. Cómo Usamos la Información</h3>
+        <ul>
+            <li>
+                **Funcionamiento del Foro:** La información recopilada se utiliza para operar y mantener el foro, permitiendo a los usuarios publicar y ver contenido.
+            </li>
+            <li>
+                **Prevención de Abusos:** Las direcciones IP y otra información mínima se utilizan para detectar y prevenir actividades maliciosas como el spam, el flooding o cualquier otra violación de nuestros Términos y Condiciones.
+            </li>
+            <li>
+                **Mejora del Servicio:** De forma anónima, podemos analizar patrones de uso para entender cómo se utiliza el foro y realizar mejoras.
+            </li>
+        </ul>
+
+        <h3>3. Compartiendo tu Información</h3>
+        <p>No vendemos, alquilamos ni compartimos tu información personal identificable con terceros, excepto en las siguientes circunstancias limitadas:</p>
+        <ul>
+            <li>
+                **Requerimiento Legal:** Si la ley nos lo exige o si creemos de buena fe que dicha acción es necesaria para cumplir con un proceso legal, proteger nuestros derechos o la seguridad de nuestros usuarios o del público.
+            </li>
+            <li>
+                **Proveedores de Servicios:** Podemos utilizar servicios de terceros (como ImgBB para la subida de imágenes o hCaptcha para la verificación) que pueden recopilar sus propias políticas de privacidad. Te recomendamos revisar sus políticas correspondientes.
+            </li>
+        </ul>
+
+        <h3>4. Seguridad de la Información</h3>
+        <p>Tomamos medidas razonables para proteger la información que recopilamos de pérdidas, robos y uso no autorizado. Sin embargo, ninguna transmisión por Internet es completamente segura, y no podemos garantizar la seguridad absoluta de tu información.</p>
+
+        <h3>5. Cambios a esta Política de Privacidad</h3>
+        <p>Podemos actualizar nuestra Política de Privacidad ocasionalmente. Te notificaremos sobre cualquier cambio publicando la nueva Política de Privacidad en esta página. Te recomendamos revisar esta política periódicamente para cualquier cambio.</p>
+
+        <h3>6. Contacto</h3>
+        <p>Si tienes preguntas sobre esta Política de Privacidad, por favor contáctanos a través de la sección de contacto del foro (si aplica).</p>
+
+        <p>Esta política de privacidad fue actualizada por última vez el 8 de junio de 2025.</p>
+    </div>
+
+    <div class="footer">
+        <ul>
+            <li><a href="index.php">Inicio</a></li>
+            <li><a href="terms.html">Términos</a></li>
+            <li><a href="privacy.html">Privacidad</a></li>
+            <li><a href="#">Contacto</a></li>
+        </ul>
+        <div class="footer-text">
+            <p>© 2025 Team Forever. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</body>
+</html>

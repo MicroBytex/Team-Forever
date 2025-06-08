@@ -1,0 +1,14 @@
+name: team-forever
+region: sfo3
+services:
+  web:
+    build_command: composer install
+    run_command: php -S 0.0.0.0:8080 -t .
+    environment_slug: php_81
+    github:
+      branch: main
+      deploy_on_push: true
+    http_port: 8080
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /

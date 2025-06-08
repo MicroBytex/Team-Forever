@@ -1,0 +1,9 @@
+{
+    "name": "team-forever/app",
+    "description": "Aplicación PHP de Team Forever",
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*"
+    },
+    "type": "project"
+}
